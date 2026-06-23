@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - La Guarapachanga</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 2h12v2H6V2zm0 3h12v1c0 1.5.5 3 1.5 4.5S21 13.5 21 15v1c0 2.5-2 4-4.5 4H7.5C5 20 3 18.5 3 16v-1c0-1.5.5-3 1.5-4.5S6 7.5 6 6V5zm2 2c0 1.5-.5 3-1.5 4.5S5 13.5 5 15v1c0 1.5 1 2 2.5 2h9c1.5 0 2.5-.5 2.5-2v-1c0-1.5-.5-3-1.5-4.5S16 8.5 16 7H8zm2 8h4v2h-4v-2z"/>
+            </svg>
+            <div class="logo-text">
+                <span class="brand">La Guarapachanga</span>
+                <span class="sub">Bar & Licores</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <span class="exchange-rate" id="exchangeRate"></span>
+            <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" title="Cambiar tema">ðŸŒ™</button>
+            <a href="reservaciones.html" class="icon-link" title="Reservaciones">&#128197;</a>
+            <a href="#" id="loginBtn">&#128100; <span class="user-display" id="userDisplay">Mi Cuenta</span></a>
+
+        </div>
+    </header>
+
+    <div class="container inv-page">
+        <h1>&#128202; Inventario de Productos</h1>
+        <p class="sub">Gesti&oacute;n completa de productos: agregar, editar, eliminar y buscar.</p>
+
+        <div class="inv-add-form" id="addForm">
+            <input type="text" id="invName" placeholder="Nombre del producto">
+            <input type="text" id="invCat" placeholder="Categor&iacute;a">
+            <input type="number" id="invPrice" placeholder="Precio base (USD)" step="0.01">
+            <input type="number" id="invOld" placeholder="Precio anterior / Oferta (USD, opcional)" step="0.01">
+            <input type="number" id="invStock" placeholder="Stock" value="10">
+            <input type="text" id="invImg" placeholder="URL de imagen (placehold.co/... o la que quieras)">
+            <input type="text" id="invSection" class="full" placeholder="Secci&oacute;n (destacados / menu)">
+            <textarea id="invDesc" class="full" placeholder="Descripci&oacute;n del producto"></textarea>
+            <div class="actions">
+                <button class="btn-primary" onclick="addProduct()">Agregar Producto</button>
+                <button class="btn-secondary" onclick="resetForm()">Limpiar</button>
+            </div>
+        </div>
+
+        <div class="inv-toolbar">
+            <input type="text" id="invSearch" placeholder="Buscar en inventario..." oninput="renderInventory()">
+        </div>
+
+        <div style="overflow-x:auto">
+            <table class="inv-table" id="invTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Categor&iacute;a</th>
+                        <th>Precio</th>
+                        <th>Oferta</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="invBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div><h4>La Guarapachanga</h4><a href="index.html">Sobre nosotros</a><a href="#">Trabaja con nosotros</a><a href="#">Sostenibilidad</a></div>
+            <div><h4>Ayuda</h4><a href="#">Preguntas frecuentes</a><a href="carrito.html">Seguimiento de pedido</a><a href="#">Devoluciones</a><a href="#">Medios de pago</a></div>
+            <div><h4>Servicios</h4><a href="#">Suscripciones</a><a href="#">Recetas semanales</a><a href="index.html">Programa de puntos</a></div>
+            <div><h4>Contacto</h4><a href="#">Atenci&oacute;n al cliente</a><a href="https://wa.me/5359189261">Whatsapp</a><a href="#">carlosshelby950@gmail.com</a></div>
+        </div>
+        <div class="footer-bottom">&copy; 2026 La Guarapachanga &mdash; Todos los derechos reservados</div>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
+    <div class="toast" id="toast"></div>
+
+    <!-- ===== FLOATING WHATSAPP SUPPORT ===== -->
+    <a href="https://wa.me/5359189261?text=%C2%A1Hola!%20Quiero%20hacer%20un%20pedido" class="whatsapp-float" target="_blank" rel="noopener" title="Pedir por WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    <script src="js/auth.js?v=2"></script>
+    <script src="js/app.js?v=2"></script>
+    <script>
+        let invProducts = [];
+        let editId = null;
+
+        function loadInventory() {
+            if (typeof allProducts !== 'undefined') { invProducts = [...allProducts]; renderInventory(); }
+        }
+
+        function renderInventory() {
+            const search = (document.getElementById('invSearch')?.value || '').toLowerCase().trim();
+            let filtered = invProducts;
+            if (search) filtered = invProducts.filter(p => p.name.toLowerCase().includes(search) || (p.cat && p.cat.toLowerCase().includes(search)));
+            const tbody = document.getElementById('invBody');
+            if (!tbody) return;
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#888">No hay productos</td></tr>'; return;
+            }
+            tbody.innerHTML = filtered.map(p => {
+                const oldCUP = p.old ? cup(p.old) : null;
+                const priceCUP = cup(p.price);
+                const discount = oldCUP ? Math.round((1 - priceCUP / oldCUP) * 100) : 0;
+                const offerCell = p.old ? `S/${p.old.toFixed(2)} <span style="color:#e74c3c;font-size:0.8em">(-${discount}%)</span>` : '--';
+                return `<tr>
+                    <td>${p.id}</td>
+                    <td>${p.img ? '<img src="'+p.img+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '--'}</td>
+                    <td><strong>${p.name}</strong></td>
+                    <td>${p.cat || ''}</td>
+                    <td>S/${p.price.toFixed(2)}</td>
+                    <td>${offerCell}</td>
+                    <td>${p.stock ?? '--'}</td>
+                    <td class="actions">
+                        <button class="btn-edit" onclick="editProduct(${p.id})">Editar</button>
+                        <button class="btn-delete" onclick="deleteProduct(${p.id})">Eliminar</button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function resetForm() {
+            editId = null;
+            ['invName','invCat','invPrice','invOld','invStock','invImg','invSection','invDesc'].forEach(id => {
+                const el = document.getElementById(id); if (el) el.value = '';
+            });
+            document.querySelector('#addForm .actions').innerHTML = '<button class="btn-primary" onclick="addProduct()">Agregar Producto</button><button class="btn-secondary" onclick="resetForm()">Limpiar</button>';
+        }
+
+        function editProduct(id) {
+            const p = invProducts.find(x => x.id === id);
+            if (!p) return;
+            editId = id;
+            document.getElementById('invName').value = p.name || '';
+            document.getElementById('invCat').value = p.cat || '';
+            document.getElementById('invPrice').value = p.price || '';
+            document.getElementById('invOld').value = p.old || '';
+            document.getElementById('invStock').value = p.stock || '';
+            document.getElementById('invImg').value = p.img || '';
+            document.getElementById('invSection').value = p.section || '';
+            document.getElementById('invDesc').value = p.desc || '';
+            document.querySelector('#addForm .actions').innerHTML = '<button class="btn-primary" onclick="saveEdit()">Guardar Cambios</button><button class="btn-secondary" onclick="resetForm()">Cancelar</button>';
+        }
+
+        function saveEdit() {
+            if (!editId) return;
+            const data = {
+                name: document.getElementById('invName').value.trim(),
+                cat: document.getElementById('invCat').value.trim(),
+                price: parseFloat(document.getElementById('invPrice').value) || 0,
+                old: parseFloat(document.getElementById('invOld').value) || null,
+                stock: parseInt(document.getElementById('invStock').value) || 0,
+                img: document.getElementById('invImg').value.trim(),
+                section: document.getElementById('invSection').value.trim(),
+                desc: document.getElementById('invDesc').value.trim()
+            };
+            if (!data.name || !data.price) { toast("Nombre y precio requeridos"); return; }
+            const idx = invProducts.findIndex(p => p.id === editId);
+            if (idx >= 0) invProducts[idx] = { ...invProducts[idx], ...data, id: editId };
+            toast("Producto actualizado"); resetForm(); renderInventory();
+        }
+
+        function addProduct() {
+            const data = {
+                name: document.getElementById('invName').value.trim(),
+                cat: document.getElementById('invCat').value.trim(),
+                price: parseFloat(document.getElementById('invPrice').value) || 0,
+                old: parseFloat(document.getElementById('invOld').value) || null,
+                stock: parseInt(document.getElementById('invStock').value) || 0,
+                img: document.getElementById('invImg').value.trim(),
+                section: document.getElementById('invSection').value.trim(),
+                desc: document.getElementById('invDesc').value.trim()
+            };
+            if (!data.name || !data.price) { toast("Nombre y precio requeridos"); return; }
+            const newId = Math.max(0, ...invProducts.map(p => p.id)) + 1;
+            invProducts.push({ ...data, id: newId });
+            toast("Producto agregado"); resetForm(); renderInventory();
+        }
+
+        function deleteProduct(id) {
+            if (!confirm("Â¿Eliminar producto #" + id + "?")) return;
+            invProducts = invProducts.filter(p => p.id !== id);
+            toast("Producto eliminado"); renderInventory();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { updateUserUI(); loadInventory(); });
+    </script>
+</body>
+</html>
