@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Guarapachanga - Bar & Licores</title>
+    <title>Mi Cuenta - La Guarapachanga</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-    <!-- ===== HEADER ===== -->
     <header class="header">
         <div class="logo" onclick="window.location.href='index.html'">
             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -19,10 +17,6 @@
                 <span class="sub">Bar & Licores</span>
             </div>
         </div>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Buscar productos..." oninput="filterProducts()">
-            <button onclick="filterProducts()">Buscar</button>
-        </div>
         <div class="header-actions">
             <span class="exchange-rate" id="exchangeRate"></span>
             <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" title="Cambiar tema">ðŸŒ™</button>
@@ -32,76 +26,59 @@
         </div>
     </header>
 
-    <!-- ===== CATEGORIES ===== -->
-    <nav class="categories" id="categoriesNav"></nav>
-
-    <!-- ===== HERO ===== -->
-    <section class="hero">
-        <h1>Ofertas de la Semana</h1>
-        <p>Las mejores cervezas, carnes a la brasa y los mejores tragos de Santiago. &#161;Pide ahora y recibe en tu casa!</p>
-        <button class="btn" onclick="document.getElementById('destacados').scrollIntoView({behavior:'smooth'})">Ver Ofertas</button>
-    </section>
-
-    <!-- ===== PRODUCTS ===== -->
-    <div class="container" id="destacados">
-        <h2 class="section-title"><span class="icon">&#9733;</span> Destacados</h2>
-        <div class="products-grid" id="productsGrid"></div>
+    <div class="container account-page">
+        <h1>Mi Cuenta</h1>
+        <div class="account-card">
+            <div class="account-field"><label>Nombre</label><input type="text" id="accountName" placeholder="Tu nombre"></div>
+            <div class="account-field"><label>Correo</label><input type="email" id="accountEmail" placeholder="tu@correo.com"></div>
+            <div class="account-field"><label>Direcci&oacute;n</label><input type="text" id="accountDir" placeholder="Tu direcci&oacute;n"></div>
+            <div class="account-field"><label>Tel&eacute;fono</label><input type="text" id="accountPhone" placeholder="+53 XX XXXXXXX"></div>
+            <div class="account-actions">
+                <button class="btn-primary" onclick="updateAccount()">Guardar Cambios</button>
+                <button class="btn-secondary" onclick="logout(); window.location.href='index.html'">Cerrar Sesi&oacute;n</button>
+            </div>
+        </div>
+        <div class="orders-section">
+            <h2>&#128230; Mis Pedidos</h2>
+            <div id="ordersList"><p style="color:#888">No tienes pedidos realizados</p></div>
+        </div>
     </div>
 
-    <div class="container">
-        <h2 class="section-title"><span class="icon">&#127860;</span> MenÃº de Tapas</h2>
-        <div class="products-grid" id="menuGrid"></div>
-    </div>
-
-    <!-- ===== FOOTER ===== -->
     <footer class="footer">
         <div class="footer-grid">
-            <div>
-                <h4>La Guarapachanga</h4>
-                <a href="index.html">Sobre nosotros</a>
-                <a href="#">Trabaja con nosotros</a>
-                <a href="#">Sostenibilidad</a>
-            </div>
-            <div>
-                <h4>Ayuda</h4>
-                <a href="#">Preguntas frecuentes</a>
-                <a href="carrito.html">Seguimiento de pedido</a>
-                <a href="#">Devoluciones</a>
-                <a href="#">Medios de pago</a>
-            </div>
-            <div>
-                <h4>Servicios</h4>
-                <a href="#">Suscripciones</a>
-                <a href="#">Recetas semanales</a>
-                <a href="login.html">Programa de puntos</a>
-            </div>
-            <div>
-                <h4>Contacto</h4>
-                <a href="#">Atenci&oacute;n al cliente</a>
-                <a href="https://wa.me/5359189261">Whatsapp</a>
-                <a href="#">carlosshelby950@gmail.com</a>
-            </div>
+            <div><h4>La Guarapachanga</h4><a href="index.html">Sobre nosotros</a><a href="#">Trabaja con nosotros</a><a href="#">Sostenibilidad</a></div>
+            <div><h4>Ayuda</h4><a href="#">Preguntas frecuentes</a><a href="carrito.html">Seguimiento de pedido</a><a href="#">Devoluciones</a><a href="#">Medios de pago</a></div>
+            <div><h4>Servicios</h4><a href="#">Suscripciones</a><a href="#">Recetas semanales</a><a href="index.html">Programa de puntos</a></div>
+            <div><h4>Contacto</h4><a href="#">Atenci&oacute;n al cliente</a><a href="https://wa.me/5359189261">Whatsapp</a><a href="#">carlosshelby950@gmail.com</a></div>
         </div>
-        <div class="footer-bottom">
-            &copy; 2026 La Guarapachanga &mdash; Todos los derechos reservados
-        </div>
+        <div class="footer-bottom">&copy; 2026 La Guarapachanga &mdash; Todos los derechos reservados</div>
     </footer>
 
-    <!-- ===== MODAL ===== -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal" id="modalContent"></div>
-    </div>
-
-    <!-- ===== TOAST ===== -->
+    <div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
     <div class="toast" id="toast"></div>
 
     <!-- ===== FLOATING WHATSAPP SUPPORT ===== -->
     <a href="https://wa.me/5359189261?text=%C2%A1Hola!%20Quiero%20hacer%20un%20pedido" class="whatsapp-float" target="_blank" rel="noopener" title="Pedir por WhatsApp">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </a>
-
-    <!-- ===== SCRIPTS ===== -->
     <script src="js/auth.js?v=2"></script>
     <script src="js/app.js?v=2"></script>
+    <script>
+        function loadAccount() {
+            if (!currentUser) { window.location.href = 'index.html'; return; }
+            document.getElementById('accountName').value = currentUser.name || '';
+            document.getElementById('accountEmail').value = currentUser.email || '';
+            document.getElementById('accountDir').value = currentUser.dir || '';
+        }
+        function updateAccount() {
+            const name = document.getElementById('accountName').value.trim();
+            const email = document.getElementById('accountEmail').value.trim();
+            const dir = document.getElementById('accountDir').value.trim();
+            if (!name || !email) { toast("Completa nombre y correo"); return; }
+            currentUser.name = name; currentUser.email = email; currentUser.dir = dir;
+            saveUser(); updateUserUI(); toast("Perfil actualizado");
+        }
+        document.addEventListener('DOMContentLoaded', () => { updateUserUI(); loadAccount(); });
+    </script>
 </body>
 </html>
